@@ -5,6 +5,11 @@
  * stock location, fulfillment/shipping, publishable API key,
  * product categories, and zero-waste products with variants.
  *
+ * Categories: Beauty, Cleaning Products, Dental Care, Kitchen,
+ * Bathroom, Gifts & Kits.
+ *
+ * All prices are in USD cents (e.g. $34.99 = 3499).
+ *
  * Run with: pnpm seed (or yarn seed)
  */
 import { CreateInventoryLevelInput, ExecArgs } from "@medusajs/framework/types";
@@ -294,13 +299,25 @@ export default async function seedDemoData({ container }: ExecArgs) {
   ).run({
     input: {
       product_categories: [
+        { name: "Beauty", is_active: true },
+        { name: "Cleaning Products", is_active: true },
+        { name: "Dental Care", is_active: true },
         { name: "Kitchen", is_active: true },
         { name: "Bathroom", is_active: true },
-        { name: "On the Go", is_active: true },
-        { name: "Home", is_active: true },
+        { name: "Gifts & Kits", is_active: true },
       ],
     },
   });
+
+  /**
+   * Helper to look up a category ID by name.
+   * Throws if the category was not seeded.
+   */
+  const catId = (name: string): string => {
+    const cat = categoryResult.find((c) => c.name === name);
+    if (!cat) throw new Error(`Category "${name}" not found in seed results`);
+    return cat.id;
+  };
 
   // ── Products ───────────────────────────────────────────────────────
   const salesChannels = [{ id: defaultSalesChannel[0].id }];
@@ -308,110 +325,412 @@ export default async function seedDemoData({ container }: ExecArgs) {
   await createProductsWorkflow(container).run({
     input: {
       products: [
+        // 1. Zero-Waste Beauty Kit
         {
-          title: "Beeswax Food Wraps (3-Pack)",
-          category_ids: [
-            categoryResult.find((c) => c.name === "Kitchen")!.id,
-          ],
+          title: "Zero-Waste Beauty Kit",
+          category_ids: [catId("Gifts & Kits")],
           description:
-            "Replace plastic wrap for good. These organic cotton wraps coated in beeswax, jojoba oil, and tree resin mold to any shape with the warmth of your hands. Washable and reusable for up to a year.",
-          handle: "beeswax-food-wraps",
+            "A curated set of beauty essentials including soap bar, lip balm, face cloth, and cotton rounds. Everything you need for a plastic-free beauty routine.",
+          handle: "zero-waste-beauty-kit",
+          weight: 350,
+          status: ProductStatus.PUBLISHED,
+          shipping_profile_id: shippingProfile.id,
+          options: [
+            { title: "Set", values: ["Standard"] },
+          ],
+          variants: [
+            {
+              title: "Standard",
+              sku: "ZW-BEAUTY-KIT",
+              options: { Set: "Standard" },
+              prices: [{ amount: 3499, currency_code: "usd" }],
+            },
+          ],
+          sales_channels: salesChannels,
+        },
+        // 2. Shea Butter Soap Bar
+        {
+          title: "Shea Butter Soap Bar",
+          category_ids: [catId("Beauty")],
+          description:
+            "Handmade with organic shea butter, gentle on skin and plastic-free. Nourishing lather that leaves skin soft and hydrated.",
+          handle: "shea-butter-soap-bar",
           weight: 120,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
           options: [
-            { title: "Size", values: ["Small Pack", "Large Pack"] },
+            { title: "Scent", values: ["Lavender", "Rose", "Unscented"] },
           ],
           variants: [
             {
-              title: "Small Pack (S/M/L)",
-              sku: "BW-WRAP-SM",
-              options: { Size: "Small Pack" },
-              prices: [{ amount: 1899, currency_code: "usd" }],
+              title: "Lavender",
+              sku: "SHEA-SOAP-LAV",
+              options: { Scent: "Lavender" },
+              prices: [{ amount: 899, currency_code: "usd" }],
             },
             {
-              title: "Large Pack (M/L/XL)",
-              sku: "BW-WRAP-LG",
-              options: { Size: "Large Pack" },
+              title: "Rose",
+              sku: "SHEA-SOAP-ROSE",
+              options: { Scent: "Rose" },
+              prices: [{ amount: 899, currency_code: "usd" }],
+            },
+            {
+              title: "Unscented",
+              sku: "SHEA-SOAP-UNS",
+              options: { Scent: "Unscented" },
+              prices: [{ amount: 899, currency_code: "usd" }],
+            },
+          ],
+          sales_channels: salesChannels,
+        },
+        // 3. Coffee Body Scrub with Lemongrass
+        {
+          title: "Coffee Body Scrub with Lemongrass",
+          category_ids: [catId("Beauty")],
+          description:
+            "Upcycled coffee grounds blended with lemongrass essential oil. Exfoliates and invigorates skin naturally. 200g jar.",
+          handle: "coffee-body-scrub-lemongrass",
+          weight: 250,
+          status: ProductStatus.PUBLISHED,
+          shipping_profile_id: shippingProfile.id,
+          options: [
+            { title: "Size", values: ["200g"] },
+          ],
+          variants: [
+            {
+              title: "200g",
+              sku: "COFFEE-SCRUB-200",
+              options: { Size: "200g" },
+              prices: [{ amount: 1499, currency_code: "usd" }],
+            },
+          ],
+          sales_channels: salesChannels,
+        },
+        // 4. Amber Glass Spray Bottle 3 Pack
+        {
+          title: "Amber Glass Spray Bottle 3 Pack",
+          category_ids: [catId("Cleaning Products")],
+          description:
+            "Refillable amber glass spray bottles, 500ml each. Durable, chemical-resistant, and perfect for homemade cleaning solutions.",
+          handle: "amber-glass-spray-bottle-3pack",
+          weight: 800,
+          status: ProductStatus.PUBLISHED,
+          shipping_profile_id: shippingProfile.id,
+          options: [
+            { title: "Set", values: ["3 Pack"] },
+          ],
+          variants: [
+            {
+              title: "3 Pack",
+              sku: "AMBER-SPRAY-3PK",
+              options: { Set: "3 Pack" },
+              prices: [{ amount: 1999, currency_code: "usd" }],
+            },
+          ],
+          sales_channels: salesChannels,
+        },
+        // 5. Zero-Waste Cleaning Kit
+        {
+          title: "Zero-Waste Cleaning Kit",
+          category_ids: [catId("Gifts & Kits")],
+          description:
+            "Includes dish brush, cleaning tablets, spray bottle, and cotton cloths. Everything you need to clean your home without single-use plastic.",
+          handle: "zero-waste-cleaning-kit",
+          weight: 600,
+          status: ProductStatus.PUBLISHED,
+          shipping_profile_id: shippingProfile.id,
+          options: [
+            { title: "Set", values: ["Standard"] },
+          ],
+          variants: [
+            {
+              title: "Standard",
+              sku: "ZW-CLEAN-KIT",
+              options: { Set: "Standard" },
+              prices: [{ amount: 2999, currency_code: "usd" }],
+            },
+          ],
+          sales_channels: salesChannels,
+        },
+        // 6. Safety Razor - Anthracite
+        {
+          title: "Safety Razor",
+          category_ids: [catId("Beauty")],
+          description:
+            "Reusable metal safety razor for plastic-free shaving. Precision-engineered with a weighted handle for a smooth, close shave.",
+          handle: "safety-razor",
+          weight: 100,
+          status: ProductStatus.PUBLISHED,
+          shipping_profile_id: shippingProfile.id,
+          options: [
+            { title: "Color", values: ["Anthracite", "Rose Gold", "Silver"] },
+          ],
+          variants: [
+            {
+              title: "Anthracite",
+              sku: "RAZOR-ANTH",
+              options: { Color: "Anthracite" },
+              prices: [{ amount: 2499, currency_code: "usd" }],
+            },
+            {
+              title: "Rose Gold",
+              sku: "RAZOR-RGOLD",
+              options: { Color: "Rose Gold" },
+              prices: [{ amount: 2499, currency_code: "usd" }],
+            },
+            {
+              title: "Silver",
+              sku: "RAZOR-SILVER",
+              options: { Color: "Silver" },
               prices: [{ amount: 2499, currency_code: "usd" }],
             },
           ],
           sales_channels: salesChannels,
         },
+        // 7. Red Clay Soap Bar
         {
-          title: "Bamboo Utensil Kit",
-          category_ids: [
-            categoryResult.find((c) => c.name === "On the Go")!.id,
-          ],
+          title: "Red Clay Soap Bar",
+          category_ids: [catId("Beauty")],
           description:
-            "A compact travel set with bamboo fork, knife, spoon, chopsticks, and a straw — all in a rolled cotton carrying pouch. Never use disposable cutlery again.",
-          handle: "bamboo-utensil-kit",
-          weight: 180,
+            "Natural red clay soap bar for detoxifying and cleansing. Rich in minerals, draws out impurities and leaves skin feeling refreshed.",
+          handle: "red-clay-soap-bar",
+          weight: 120,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
           options: [
-            { title: "Color", values: ["Natural", "Charcoal"] },
+            { title: "Size", values: ["Standard"] },
           ],
           variants: [
             {
-              title: "Natural",
-              sku: "BAM-UTN-NAT",
-              options: { Color: "Natural" },
-              prices: [{ amount: 1499, currency_code: "usd" }],
-            },
-            {
-              title: "Charcoal",
-              sku: "BAM-UTN-CHR",
-              options: { Color: "Charcoal" },
-              prices: [{ amount: 1499, currency_code: "usd" }],
+              title: "Standard",
+              sku: "RCLAY-SOAP",
+              options: { Size: "Standard" },
+              prices: [{ amount: 899, currency_code: "usd" }],
             },
           ],
           sales_channels: salesChannels,
         },
+        // 8. 2-in-1 Shampoo + Conditioner Bar
         {
-          title: "Shampoo Bar — Lavender & Oat",
-          category_ids: [
-            categoryResult.find((c) => c.name === "Bathroom")!.id,
-          ],
+          title: "2-in-1 Shampoo + Conditioner Bar",
+          category_ids: [catId("Bathroom")],
           description:
-            "One bar replaces 2-3 bottles of liquid shampoo. Made with organic coconut oil, shea butter, and essential oils. Sulfate-free, plastic-free, and lasts up to 80 washes.",
-          handle: "shampoo-bar-lavender",
+            "Solid shampoo and conditioner bar that lasts 80+ washes. Sulfate-free, plastic-free, and perfect for travel.",
+          handle: "2in1-shampoo-conditioner-bar",
           weight: 85,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
           options: [
-            { title: "Scent", values: ["Lavender & Oat", "Mint & Tea Tree", "Unscented"] },
+            { title: "Hair Type", values: ["Normal Hair", "Dry Hair", "Oily Hair"] },
           ],
           variants: [
             {
-              title: "Lavender & Oat",
-              sku: "SBAR-LAV",
-              options: { Scent: "Lavender & Oat" },
+              title: "Normal Hair",
+              sku: "SBAR-NORMAL",
+              options: { "Hair Type": "Normal Hair" },
               prices: [{ amount: 1299, currency_code: "usd" }],
             },
             {
-              title: "Mint & Tea Tree",
-              sku: "SBAR-MINT",
-              options: { Scent: "Mint & Tea Tree" },
+              title: "Dry Hair",
+              sku: "SBAR-DRY",
+              options: { "Hair Type": "Dry Hair" },
               prices: [{ amount: 1299, currency_code: "usd" }],
             },
             {
-              title: "Unscented",
-              sku: "SBAR-UNS",
-              options: { Scent: "Unscented" },
-              prices: [{ amount: 1199, currency_code: "usd" }],
+              title: "Oily Hair",
+              sku: "SBAR-OILY",
+              options: { "Hair Type": "Oily Hair" },
+              prices: [{ amount: 1299, currency_code: "usd" }],
             },
           ],
           sales_channels: salesChannels,
         },
+        // 9. Cotton Nut Milk Bag
+        {
+          title: "Cotton Nut Milk Bag",
+          category_ids: [catId("Kitchen")],
+          description:
+            "Organic cotton mesh bag for making homemade nut milk, juice, and straining. Fine weave catches pulp while letting liquid flow freely.",
+          handle: "cotton-nut-milk-bag",
+          weight: 40,
+          status: ProductStatus.PUBLISHED,
+          shipping_profile_id: shippingProfile.id,
+          options: [
+            { title: "Size", values: ["Standard"] },
+          ],
+          variants: [
+            {
+              title: "Standard",
+              sku: "NUT-MILK-BAG",
+              options: { Size: "Standard" },
+              prices: [{ amount: 699, currency_code: "usd" }],
+            },
+          ],
+          sales_channels: salesChannels,
+        },
+        // 10. Zero-Waste Bathroom Starter Kit
+        {
+          title: "Zero-Waste Bathroom Starter Kit",
+          category_ids: [catId("Gifts & Kits")],
+          description:
+            "Bamboo toothbrush, shampoo bar, safety razor, cotton rounds, and soap bar. The complete kit to make your bathroom plastic-free.",
+          handle: "zero-waste-bathroom-starter-kit",
+          weight: 500,
+          status: ProductStatus.PUBLISHED,
+          shipping_profile_id: shippingProfile.id,
+          options: [
+            { title: "Set", values: ["Standard"] },
+          ],
+          variants: [
+            {
+              title: "Standard",
+              sku: "ZW-BATH-KIT",
+              options: { Set: "Standard" },
+              prices: [{ amount: 3999, currency_code: "usd" }],
+            },
+          ],
+          sales_channels: salesChannels,
+        },
+        // 11. Bamboo Dish Brush
+        {
+          title: "Bamboo Dish Brush",
+          category_ids: [catId("Kitchen")],
+          description:
+            "Compostable bamboo dish brush with replaceable head. Sturdy natural bristles cut through grease without scratching.",
+          handle: "bamboo-dish-brush",
+          weight: 80,
+          status: ProductStatus.PUBLISHED,
+          shipping_profile_id: shippingProfile.id,
+          options: [
+            { title: "Size", values: ["Standard"] },
+          ],
+          variants: [
+            {
+              title: "Standard",
+              sku: "BAM-DISH-BRUSH",
+              options: { Size: "Standard" },
+              prices: [{ amount: 799, currency_code: "usd" }],
+            },
+          ],
+          sales_channels: salesChannels,
+        },
+        // 12. Bamboo Toothbrush 4-Pack
+        {
+          title: "Bamboo Toothbrush 4-Pack",
+          category_ids: [catId("Dental Care")],
+          description:
+            "Sustainably sourced bamboo handles with charcoal-infused bristles. Compostable handle, recyclable bristles. Family 4-pack lasts a year.",
+          handle: "bamboo-toothbrush-4pack",
+          weight: 60,
+          status: ProductStatus.PUBLISHED,
+          shipping_profile_id: shippingProfile.id,
+          options: [
+            { title: "Bristle", values: ["Soft", "Medium"] },
+          ],
+          variants: [
+            {
+              title: "Soft",
+              sku: "BTOOTH-SOFT",
+              options: { Bristle: "Soft" },
+              prices: [{ amount: 999, currency_code: "usd" }],
+            },
+            {
+              title: "Medium",
+              sku: "BTOOTH-MED",
+              options: { Bristle: "Medium" },
+              prices: [{ amount: 999, currency_code: "usd" }],
+            },
+          ],
+          sales_channels: salesChannels,
+        },
+        // 13. Toothpaste Tablets
+        {
+          title: "Toothpaste Tablets",
+          category_ids: [catId("Dental Care")],
+          description:
+            "Plastic-free toothpaste in tablet form, fluoride-free. 60 tablets per tin. Just chew, brush, and rinse.",
+          handle: "toothpaste-tablets",
+          weight: 50,
+          status: ProductStatus.PUBLISHED,
+          shipping_profile_id: shippingProfile.id,
+          options: [
+            { title: "Flavor", values: ["Mint", "Charcoal"] },
+          ],
+          variants: [
+            {
+              title: "Mint",
+              sku: "TPASTE-TAB-MINT",
+              options: { Flavor: "Mint" },
+              prices: [{ amount: 899, currency_code: "usd" }],
+            },
+            {
+              title: "Charcoal",
+              sku: "TPASTE-TAB-CHAR",
+              options: { Flavor: "Charcoal" },
+              prices: [{ amount: 899, currency_code: "usd" }],
+            },
+          ],
+          sales_channels: salesChannels,
+        },
+        // 14. Dental Floss in Glass Jar
+        {
+          title: "Dental Floss in Glass Jar",
+          category_ids: [catId("Dental Care")],
+          description:
+            "Biodegradable silk dental floss in a refillable glass jar. Naturally waxed with candelilla wax, mint-flavored.",
+          handle: "dental-floss-glass-jar",
+          weight: 45,
+          status: ProductStatus.PUBLISHED,
+          shipping_profile_id: shippingProfile.id,
+          options: [
+            { title: "Size", values: ["Standard"] },
+          ],
+          variants: [
+            {
+              title: "Standard",
+              sku: "DFLOSS-GLASS",
+              options: { Size: "Standard" },
+              prices: [{ amount: 599, currency_code: "usd" }],
+            },
+          ],
+          sales_channels: salesChannels,
+        },
+        // 15. Beeswax Food Wraps 3-Pack
+        {
+          title: "Beeswax Food Wraps 3-Pack",
+          category_ids: [catId("Kitchen")],
+          description:
+            "Reusable beeswax wraps to replace plastic wrap. Made with organic cotton, beeswax, jojoba oil, and tree resin. Washable and reusable for up to a year.",
+          handle: "beeswax-food-wraps-3pack",
+          weight: 120,
+          status: ProductStatus.PUBLISHED,
+          shipping_profile_id: shippingProfile.id,
+          options: [
+            { title: "Size", values: ["Small Pack (S/M/L)", "Large Pack (M/L/XL)"] },
+          ],
+          variants: [
+            {
+              title: "Small Pack (S/M/L)",
+              sku: "BW-WRAP-SM",
+              options: { Size: "Small Pack (S/M/L)" },
+              prices: [{ amount: 1899, currency_code: "usd" }],
+            },
+            {
+              title: "Large Pack (M/L/XL)",
+              sku: "BW-WRAP-LG",
+              options: { Size: "Large Pack (M/L/XL)" },
+              prices: [{ amount: 2499, currency_code: "usd" }],
+            },
+          ],
+          sales_channels: salesChannels,
+        },
+        // 16. Stainless Steel Water Bottle
         {
           title: "Stainless Steel Water Bottle",
-          category_ids: [
-            categoryResult.find((c) => c.name === "On the Go")!.id,
-          ],
+          category_ids: [catId("Kitchen")],
           description:
-            "Double-walled vacuum insulation keeps drinks cold 24hrs or hot 12hrs. Powder-coated finish, leak-proof lid, fits standard cup holders. BPA-free.",
-          handle: "steel-water-bottle",
+            "Double-walled vacuum insulated, keeps drinks cold 24hrs or hot 12hrs. Powder-coated finish, leak-proof lid. BPA-free.",
+          handle: "stainless-steel-water-bottle",
           weight: 340,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -459,126 +778,6 @@ export default async function seedDemoData({ container }: ExecArgs) {
           ],
           sales_channels: salesChannels,
         },
-        {
-          title: "Compost Bin — Countertop",
-          category_ids: [
-            categoryResult.find((c) => c.name === "Kitchen")!.id,
-          ],
-          description:
-            "Sleek 1.3-gallon stainless steel compost bin with charcoal filters to eliminate odors. Dishwasher-safe inner bucket. Sits neatly on any countertop.",
-          handle: "countertop-compost-bin",
-          weight: 900,
-          status: ProductStatus.PUBLISHED,
-          shipping_profile_id: shippingProfile.id,
-          options: [
-            { title: "Finish", values: ["Brushed Steel", "Matte White"] },
-          ],
-          variants: [
-            {
-              title: "Brushed Steel",
-              sku: "COMP-BIN-STL",
-              options: { Finish: "Brushed Steel" },
-              prices: [{ amount: 3999, currency_code: "usd" }],
-            },
-            {
-              title: "Matte White",
-              sku: "COMP-BIN-WHT",
-              options: { Finish: "Matte White" },
-              prices: [{ amount: 3999, currency_code: "usd" }],
-            },
-          ],
-          sales_channels: salesChannels,
-        },
-        {
-          title: "Bamboo Toothbrush (4-Pack)",
-          category_ids: [
-            categoryResult.find((c) => c.name === "Bathroom")!.id,
-          ],
-          description:
-            "Sustainably harvested bamboo handles with charcoal-infused BPA-free bristles. Compostable handle, recyclable bristles. Family 4-pack lasts a year.",
-          handle: "bamboo-toothbrush-4pack",
-          weight: 60,
-          status: ProductStatus.PUBLISHED,
-          shipping_profile_id: shippingProfile.id,
-          options: [
-            { title: "Bristle", values: ["Soft", "Medium"] },
-          ],
-          variants: [
-            {
-              title: "Soft",
-              sku: "BTOOTH-SOFT",
-              options: { Bristle: "Soft" },
-              prices: [{ amount: 999, currency_code: "usd" }],
-            },
-            {
-              title: "Medium",
-              sku: "BTOOTH-MED",
-              options: { Bristle: "Medium" },
-              prices: [{ amount: 999, currency_code: "usd" }],
-            },
-          ],
-          sales_channels: salesChannels,
-        },
-        {
-          title: "Reusable Produce Bags (Set of 6)",
-          category_ids: [
-            categoryResult.find((c) => c.name === "On the Go")!.id,
-          ],
-          description:
-            "Lightweight organic cotton mesh bags in three sizes. Replace hundreds of plastic produce bags per year. Machine washable with drawstring closure.",
-          handle: "reusable-produce-bags",
-          weight: 150,
-          status: ProductStatus.PUBLISHED,
-          shipping_profile_id: shippingProfile.id,
-          options: [
-            { title: "Set", values: ["Standard (6-pack)", "Bulk (12-pack)"] },
-          ],
-          variants: [
-            {
-              title: "Standard (6-pack)",
-              sku: "PROD-BAG-6",
-              options: { Set: "Standard (6-pack)" },
-              prices: [{ amount: 1599, currency_code: "usd" }],
-            },
-            {
-              title: "Bulk (12-pack)",
-              sku: "PROD-BAG-12",
-              options: { Set: "Bulk (12-pack)" },
-              prices: [{ amount: 2499, currency_code: "usd" }],
-            },
-          ],
-          sales_channels: salesChannels,
-        },
-        {
-          title: "Organic Cotton Tote Bag",
-          category_ids: [
-            categoryResult.find((c) => c.name === "On the Go")!.id,
-          ],
-          description:
-            "Heavy-duty 10oz organic cotton tote with reinforced handles. Carries up to 40lbs. GOTS certified, unbleached, undyed — the last grocery bag you will ever need.",
-          handle: "organic-cotton-tote",
-          weight: 280,
-          status: ProductStatus.PUBLISHED,
-          shipping_profile_id: shippingProfile.id,
-          options: [
-            { title: "Style", values: ["Natural", "Earth Print"] },
-          ],
-          variants: [
-            {
-              title: "Natural",
-              sku: "TOTE-NAT",
-              options: { Style: "Natural" },
-              prices: [{ amount: 1899, currency_code: "usd" }],
-            },
-            {
-              title: "Earth Print",
-              sku: "TOTE-EARTH",
-              options: { Style: "Earth Print" },
-              prices: [{ amount: 2199, currency_code: "usd" }],
-            },
-          ],
-          sales_channels: salesChannels,
-        },
       ],
     },
   });
@@ -604,5 +803,5 @@ export default async function seedDemoData({ container }: ExecArgs) {
   });
 
   logger.info("Finished seeding inventory levels data.");
-  logger.info("🌱 Zero Waste store seeded successfully!");
+  logger.info("Zero Waste store seeded successfully!");
 }
