@@ -1,16 +1,28 @@
 /**
- * Seed script for Zero Waste store.
+ * @file Seed script for the Zero Waste e-commerce store (Medusa v2).
  *
- * Creates: store config, sales channel, region (US), tax regions,
- * stock location, fulfillment/shipping, publishable API key,
- * product categories, and zero-waste products with variants.
+ * @description
+ * Bootstraps the entire store from scratch: store configuration, sales channel,
+ * US region with tax zones, stock location (Austin warehouse), fulfillment
+ * providers, shipping options (Eco Ground + Express), a publishable API key,
+ * six product categories, 24 zero-waste products with variants, and initial
+ * inventory levels (500 units per SKU).
  *
- * Categories: Beauty, Cleaning Products, Dental Care, Kitchen,
- * Bathroom, Gifts & Kits.
+ * **Product categories:**
+ * - Bath & Body -- soaps, scrubs, razors, starter kits
+ * - Hair Care -- shampoo bars, conditioner bars, brushes
+ * - Kitchen -- dish brushes, food wraps, bottles, cloths, cleaning kits
+ * - Laundry -- detergent sheets, dryer balls
+ * - Oral Hygiene -- toothbrushes, toothpaste tablets, dental floss
+ * - Skin Care -- beauty kits, face moisturizer
  *
  * All prices are in USD cents (e.g. $34.99 = 3499).
  *
- * Run with: pnpm seed (or yarn seed)
+ * @example
+ * // Run via Medusa CLI
+ * pnpm seed
+ *
+ * @module scripts/seed
  */
 import { CreateInventoryLevelInput, ExecArgs } from "@medusajs/framework/types";
 import {
@@ -41,7 +53,13 @@ import {
 } from "@medusajs/medusa/core-flows";
 import { ApiKey } from "../../.medusa/types/query-entry-points";
 
-/** Helper workflow to set store currencies */
+/**
+ * Helper workflow that updates supported currencies on the store.
+ *
+ * @param input - Object containing the store ID and an array of currency
+ *   definitions with their default flag.
+ * @returns The updated store records from {@link updateStoresStep}.
+ */
 const updateStoreCurrencies = createWorkflow(
   "update-store-currencies",
   (input: {
@@ -67,6 +85,17 @@ const updateStoreCurrencies = createWorkflow(
   }
 );
 
+/**
+ * Seeds the Zero Waste store with demo data.
+ *
+ * Idempotent for the sales channel and API key (checks before creating),
+ * but products/categories/regions are always created fresh -- intended to
+ * run against an empty database.
+ *
+ * @param root0 - Medusa execution arguments.
+ * @param root0.container - The dependency-injection container providing
+ *   access to all Medusa modules, the query runner, and the link service.
+ */
 export default async function seedDemoData({ container }: ExecArgs) {
   const logger = container.resolve(ContainerRegistrationKeys.LOGGER);
   const link = container.resolve(ContainerRegistrationKeys.LINK);
@@ -299,19 +328,22 @@ export default async function seedDemoData({ container }: ExecArgs) {
   ).run({
     input: {
       product_categories: [
-        { name: "Beauty", is_active: true },
-        { name: "Cleaning Products", is_active: true },
-        { name: "Dental Care", is_active: true },
+        { name: "Bath & Body", is_active: true },
+        { name: "Hair Care", is_active: true },
         { name: "Kitchen", is_active: true },
-        { name: "Bathroom", is_active: true },
-        { name: "Gifts & Kits", is_active: true },
+        { name: "Laundry", is_active: true },
+        { name: "Oral Hygiene", is_active: true },
+        { name: "Skin Care", is_active: true },
       ],
     },
   });
 
   /**
-   * Helper to look up a category ID by name.
-   * Throws if the category was not seeded.
+   * Resolves a product category ID by its display name.
+   *
+   * @param name - Exact category name as seeded (e.g. "Bath & Body").
+   * @returns The Medusa category ID string.
+   * @throws {Error} If the category name does not match any seeded category.
    */
   const catId = (name: string): string => {
     const cat = categoryResult.find((c) => c.name === name);
@@ -328,7 +360,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
         // 1. Zero-Waste Beauty Kit
         {
           title: "Zero-Waste Beauty Kit",
-          category_ids: [catId("Gifts & Kits")],
+          category_ids: [catId("Skin Care")],
           description:
             "A curated set of beauty essentials including soap bar, lip balm, face cloth, and cotton rounds. Everything you need for a plastic-free beauty routine.",
           handle: "zero-waste-beauty-kit",
@@ -351,7 +383,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
         // 2. Shea Butter Soap Bar
         {
           title: "Shea Butter Soap Bar",
-          category_ids: [catId("Beauty")],
+          category_ids: [catId("Bath & Body")],
           description:
             "Handmade with organic shea butter, gentle on skin and plastic-free. Nourishing lather that leaves skin soft and hydrated.",
           handle: "shea-butter-soap-bar",
@@ -386,7 +418,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
         // 3. Coffee Body Scrub with Lemongrass
         {
           title: "Coffee Body Scrub with Lemongrass",
-          category_ids: [catId("Beauty")],
+          category_ids: [catId("Bath & Body")],
           description:
             "Upcycled coffee grounds blended with lemongrass essential oil. Exfoliates and invigorates skin naturally. 200g jar.",
           handle: "coffee-body-scrub-lemongrass",
@@ -409,7 +441,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
         // 4. Amber Glass Spray Bottle 3 Pack
         {
           title: "Amber Glass Spray Bottle 3 Pack",
-          category_ids: [catId("Cleaning Products")],
+          category_ids: [catId("Kitchen")],
           description:
             "Refillable amber glass spray bottles, 500ml each. Durable, chemical-resistant, and perfect for homemade cleaning solutions.",
           handle: "amber-glass-spray-bottle-3pack",
@@ -432,7 +464,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
         // 5. Zero-Waste Cleaning Kit
         {
           title: "Zero-Waste Cleaning Kit",
-          category_ids: [catId("Gifts & Kits")],
+          category_ids: [catId("Kitchen")],
           description:
             "Includes dish brush, cleaning tablets, spray bottle, and cotton cloths. Everything you need to clean your home without single-use plastic.",
           handle: "zero-waste-cleaning-kit",
@@ -455,7 +487,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
         // 6. Safety Razor - Anthracite
         {
           title: "Safety Razor",
-          category_ids: [catId("Beauty")],
+          category_ids: [catId("Bath & Body")],
           description:
             "Reusable metal safety razor for plastic-free shaving. Precision-engineered with a weighted handle for a smooth, close shave.",
           handle: "safety-razor",
@@ -490,7 +522,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
         // 7. Red Clay Soap Bar
         {
           title: "Red Clay Soap Bar",
-          category_ids: [catId("Beauty")],
+          category_ids: [catId("Bath & Body")],
           description:
             "Natural red clay soap bar for detoxifying and cleansing. Rich in minerals, draws out impurities and leaves skin feeling refreshed.",
           handle: "red-clay-soap-bar",
@@ -513,7 +545,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
         // 8. 2-in-1 Shampoo + Conditioner Bar
         {
           title: "2-in-1 Shampoo + Conditioner Bar",
-          category_ids: [catId("Bathroom")],
+          category_ids: [catId("Hair Care")],
           description:
             "Solid shampoo and conditioner bar that lasts 80+ washes. Sulfate-free, plastic-free, and perfect for travel.",
           handle: "2in1-shampoo-conditioner-bar",
@@ -571,7 +603,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
         // 10. Zero-Waste Bathroom Starter Kit
         {
           title: "Zero-Waste Bathroom Starter Kit",
-          category_ids: [catId("Gifts & Kits")],
+          category_ids: [catId("Bath & Body")],
           description:
             "Bamboo toothbrush, shampoo bar, safety razor, cotton rounds, and soap bar. The complete kit to make your bathroom plastic-free.",
           handle: "zero-waste-bathroom-starter-kit",
@@ -617,7 +649,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
         // 12. Bamboo Toothbrush 4-Pack
         {
           title: "Bamboo Toothbrush 4-Pack",
-          category_ids: [catId("Dental Care")],
+          category_ids: [catId("Oral Hygiene")],
           description:
             "Sustainably sourced bamboo handles with charcoal-infused bristles. Compostable handle, recyclable bristles. Family 4-pack lasts a year.",
           handle: "bamboo-toothbrush-4pack",
@@ -646,7 +678,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
         // 13. Toothpaste Tablets
         {
           title: "Toothpaste Tablets",
-          category_ids: [catId("Dental Care")],
+          category_ids: [catId("Oral Hygiene")],
           description:
             "Plastic-free toothpaste in tablet form, fluoride-free. 60 tablets per tin. Just chew, brush, and rinse.",
           handle: "toothpaste-tablets",
@@ -675,7 +707,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
         // 14. Dental Floss in Glass Jar
         {
           title: "Dental Floss in Glass Jar",
-          category_ids: [catId("Dental Care")],
+          category_ids: [catId("Oral Hygiene")],
           description:
             "Biodegradable silk dental floss in a refillable glass jar. Naturally waxed with candelilla wax, mint-flavored.",
           handle: "dental-floss-glass-jar",
@@ -774,6 +806,232 @@ export default async function seedDemoData({ container }: ExecArgs) {
               sku: "SWB-750-SND",
               options: { Size: "750ml", Color: "Sand" },
               prices: [{ amount: 3499, currency_code: "usd" }],
+            },
+          ],
+          sales_channels: salesChannels,
+        },
+        // 17. Laundry Detergent Sheets
+        {
+          title: "Laundry Detergent Sheets",
+          category_ids: [catId("Laundry")],
+          description:
+            "Pre-measured, ultra-concentrated laundry detergent sheets that dissolve completely in hot or cold water. Zero-waste packaging, no plastic jugs.",
+          handle: "laundry-detergent-sheets",
+          weight: 150,
+          status: ProductStatus.PUBLISHED,
+          shipping_profile_id: shippingProfile.id,
+          options: [
+            { title: "Scent", values: ["Fresh Linen", "Unscented"] },
+          ],
+          variants: [
+            {
+              title: "Fresh Linen",
+              sku: "LAUNDRY-SHEETS-FL",
+              options: { Scent: "Fresh Linen" },
+              prices: [{ amount: 2099, currency_code: "usd" }],
+            },
+            {
+              title: "Unscented",
+              sku: "LAUNDRY-SHEETS-UNS",
+              options: { Scent: "Unscented" },
+              prices: [{ amount: 2099, currency_code: "usd" }],
+            },
+          ],
+          sales_channels: salesChannels,
+        },
+        // 18. Wool Dryer Balls 6-Pack
+        {
+          title: "Wool Dryer Balls 6-Pack",
+          category_ids: [catId("Laundry")],
+          description:
+            "100% New Zealand wool dryer balls that naturally soften clothes and reduce drying time by up to 25%. Replaces single-use dryer sheets for 1,000+ loads.",
+          handle: "wool-dryer-balls-6pack",
+          weight: 300,
+          status: ProductStatus.PUBLISHED,
+          shipping_profile_id: shippingProfile.id,
+          options: [
+            { title: "Set", values: ["6-Pack"] },
+          ],
+          variants: [
+            {
+              title: "6-Pack",
+              sku: "DRYER-BALLS-6",
+              options: { Set: "6-Pack" },
+              prices: [{ amount: 1699, currency_code: "usd" }],
+            },
+          ],
+          sales_channels: salesChannels,
+        },
+        // 19. Shampoo Bar
+        {
+          title: "Shampoo Bar",
+          category_ids: [catId("Hair Care")],
+          description:
+            "Sulfate-free solid shampoo bar that lasts 60+ washes. Gentle formula with natural essential oils, plastic-free packaging.",
+          handle: "shampoo-bar",
+          weight: 85,
+          status: ProductStatus.PUBLISHED,
+          shipping_profile_id: shippingProfile.id,
+          options: [
+            { title: "Scent", values: ["Bloom", "Peppermint", "Unscented"] },
+          ],
+          variants: [
+            {
+              title: "Bloom",
+              sku: "SHAMPOO-BAR-BLM",
+              options: { Scent: "Bloom" },
+              prices: [{ amount: 1599, currency_code: "usd" }],
+            },
+            {
+              title: "Peppermint",
+              sku: "SHAMPOO-BAR-PEP",
+              options: { Scent: "Peppermint" },
+              prices: [{ amount: 1599, currency_code: "usd" }],
+            },
+            {
+              title: "Unscented",
+              sku: "SHAMPOO-BAR-UNS",
+              options: { Scent: "Unscented" },
+              prices: [{ amount: 1599, currency_code: "usd" }],
+            },
+          ],
+          sales_channels: salesChannels,
+        },
+        // 20. Conditioner Bar
+        {
+          title: "Conditioner Bar",
+          category_ids: [catId("Hair Care")],
+          description:
+            "Solid conditioner bar that deeply nourishes and detangles. Long-lasting, travel-friendly, and completely plastic-free.",
+          handle: "conditioner-bar",
+          weight: 85,
+          status: ProductStatus.PUBLISHED,
+          shipping_profile_id: shippingProfile.id,
+          options: [
+            { title: "Hair Type", values: ["Normal", "Dry", "Oily"] },
+          ],
+          variants: [
+            {
+              title: "Normal",
+              sku: "COND-BAR-NORM",
+              options: { "Hair Type": "Normal" },
+              prices: [{ amount: 1599, currency_code: "usd" }],
+            },
+            {
+              title: "Dry",
+              sku: "COND-BAR-DRY",
+              options: { "Hair Type": "Dry" },
+              prices: [{ amount: 1599, currency_code: "usd" }],
+            },
+            {
+              title: "Oily",
+              sku: "COND-BAR-OILY",
+              options: { "Hair Type": "Oily" },
+              prices: [{ amount: 1599, currency_code: "usd" }],
+            },
+          ],
+          sales_channels: salesChannels,
+        },
+        // 21. Bamboo Hair Brush
+        {
+          title: "Bamboo Hair Brush",
+          category_ids: [catId("Hair Care")],
+          description:
+            "Eco-friendly bamboo hair brush with natural bristles. Gentle on scalp, reduces static, and promotes healthy hair. Biodegradable handle.",
+          handle: "bamboo-hair-brush",
+          weight: 120,
+          status: ProductStatus.PUBLISHED,
+          shipping_profile_id: shippingProfile.id,
+          options: [
+            { title: "Size", values: ["Standard"] },
+          ],
+          variants: [
+            {
+              title: "Standard",
+              sku: "BAMBOO-BRUSH",
+              options: { Size: "Standard" },
+              prices: [{ amount: 2199, currency_code: "usd" }],
+            },
+          ],
+          sales_channels: salesChannels,
+        },
+        // 22. Face Moisturizer
+        {
+          title: "Face Moisturizer",
+          category_ids: [catId("Skin Care")],
+          description:
+            "Lightweight, all-natural face moisturizer in a glass jar. Made with jojoba oil, shea butter, and vitamin E. Plastic-free packaging.",
+          handle: "face-moisturizer",
+          weight: 100,
+          status: ProductStatus.PUBLISHED,
+          shipping_profile_id: shippingProfile.id,
+          options: [
+            { title: "Size", values: ["Standard"] },
+          ],
+          variants: [
+            {
+              title: "Standard",
+              sku: "FACE-MOIST",
+              options: { Size: "Standard" },
+              prices: [{ amount: 1899, currency_code: "usd" }],
+            },
+          ],
+          sales_channels: salesChannels,
+        },
+        // 23. Reusable Paper Towels 12-Pack
+        {
+          title: "Reusable Paper Towels 12-Pack",
+          category_ids: [catId("Kitchen")],
+          description:
+            "Washable, reusable paper towel replacements made from organic cotton and cellulose. Each sheet replaces up to 80 disposable paper towels.",
+          handle: "reusable-paper-towels-12pack",
+          weight: 200,
+          status: ProductStatus.PUBLISHED,
+          shipping_profile_id: shippingProfile.id,
+          options: [
+            { title: "Set", values: ["12-Pack"] },
+          ],
+          variants: [
+            {
+              title: "12-Pack",
+              sku: "REUSE-TOWELS-12",
+              options: { Set: "12-Pack" },
+              prices: [{ amount: 2799, currency_code: "usd" }],
+            },
+          ],
+          sales_channels: salesChannels,
+        },
+        // 24. Swedish Dish Cloth
+        {
+          title: "Swedish Dish Cloth",
+          category_ids: [catId("Kitchen")],
+          description:
+            "Compostable Swedish dish cloth made from cotton and cellulose. Absorbs 15x its weight, replaces 17 rolls of paper towels. Machine washable.",
+          handle: "swedish-dish-cloth",
+          weight: 30,
+          status: ProductStatus.PUBLISHED,
+          shipping_profile_id: shippingProfile.id,
+          options: [
+            { title: "Pattern", values: ["Lemons", "Herbs", "Plain"] },
+          ],
+          variants: [
+            {
+              title: "Lemons",
+              sku: "SWEDISH-CLOTH-LEM",
+              options: { Pattern: "Lemons" },
+              prices: [{ amount: 549, currency_code: "usd" }],
+            },
+            {
+              title: "Herbs",
+              sku: "SWEDISH-CLOTH-HRB",
+              options: { Pattern: "Herbs" },
+              prices: [{ amount: 549, currency_code: "usd" }],
+            },
+            {
+              title: "Plain",
+              sku: "SWEDISH-CLOTH-PLN",
+              options: { Pattern: "Plain" },
+              prices: [{ amount: 549, currency_code: "usd" }],
             },
           ],
           sales_channels: salesChannels,
