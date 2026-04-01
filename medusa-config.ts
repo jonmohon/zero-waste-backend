@@ -3,6 +3,11 @@ import { loadEnv, defineConfig } from '@medusajs/framework/utils'
 loadEnv(process.env.NODE_ENV || 'development', process.cwd())
 
 module.exports = defineConfig({
+  /* Disable admin dashboard in production — saves ~500MB RAM.
+     Use localhost:9000/app during local dev instead. */
+  admin: {
+    disable: process.env.NODE_ENV === "production",
+  },
   projectConfig: {
     databaseUrl: process.env.DATABASE_URL,
     http: {
