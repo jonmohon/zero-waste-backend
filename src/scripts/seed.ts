@@ -364,6 +364,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
           description:
             "A curated set of beauty essentials including soap bar, lip balm, face cloth, and cotton rounds. Everything you need for a plastic-free beauty routine.",
           handle: "zero-waste-beauty-kit",
+          thumbnail: "https://images.unsplash.com/photo-1563391506244-af91a410fcc9?w=800&q=85",
+          images: [{ url: "https://images.unsplash.com/photo-1563391506244-af91a410fcc9?w=800&q=85" }],
           weight: 350,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -387,6 +389,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
           description:
             "Handmade with organic shea butter, gentle on skin and plastic-free. Nourishing lather that leaves skin soft and hydrated.",
           handle: "shea-butter-soap-bar",
+          thumbnail: "https://images.unsplash.com/photo-1547904558-dedfe53b51d7?w=800&q=85",
+          images: [{ url: "https://images.unsplash.com/photo-1547904558-dedfe53b51d7?w=800&q=85" }],
           weight: 120,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -422,6 +426,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
           description:
             "Upcycled coffee grounds blended with lemongrass essential oil. Exfoliates and invigorates skin naturally. 200g jar.",
           handle: "coffee-body-scrub-lemongrass",
+          thumbnail: "https://images.unsplash.com/photo-1681880096619-0fe10e24b048?w=800&q=85",
+          images: [{ url: "https://images.unsplash.com/photo-1681880096619-0fe10e24b048?w=800&q=85" }],
           weight: 250,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -445,6 +451,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
           description:
             "Refillable amber glass spray bottles, 500ml each. Durable, chemical-resistant, and perfect for homemade cleaning solutions.",
           handle: "amber-glass-spray-bottle-3pack",
+          thumbnail: "https://images.unsplash.com/photo-1560521166-99f8bed834f5?w=800&q=85",
+          images: [{ url: "https://images.unsplash.com/photo-1560521166-99f8bed834f5?w=800&q=85" }],
           weight: 800,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -468,6 +476,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
           description:
             "Includes dish brush, cleaning tablets, spray bottle, and cotton cloths. Everything you need to clean your home without single-use plastic.",
           handle: "zero-waste-cleaning-kit",
+          thumbnail: "https://images.unsplash.com/photo-1583907659441-addbe699e921?w=800&q=85",
+          images: [{ url: "https://images.unsplash.com/photo-1583907659441-addbe699e921?w=800&q=85" }],
           weight: 600,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -491,6 +501,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
           description:
             "Reusable metal safety razor for plastic-free shaving. Precision-engineered with a weighted handle for a smooth, close shave.",
           handle: "safety-razor",
+          thumbnail: "https://images.unsplash.com/photo-1563635707357-edc8f574fd01?w=800&q=85",
+          images: [{ url: "https://images.unsplash.com/photo-1563635707357-edc8f574fd01?w=800&q=85" }],
           weight: 100,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -526,6 +538,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
           description:
             "Natural red clay soap bar for detoxifying and cleansing. Rich in minerals, draws out impurities and leaves skin feeling refreshed.",
           handle: "red-clay-soap-bar",
+          thumbnail: "https://images.unsplash.com/photo-1603533627544-4b256401b1ee?w=800&q=85",
+          images: [{ url: "https://images.unsplash.com/photo-1603533627544-4b256401b1ee?w=800&q=85" }],
           weight: 120,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -549,6 +563,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
           description:
             "Solid shampoo and conditioner bar that lasts 80+ washes. Sulfate-free, plastic-free, and perfect for travel.",
           handle: "2in1-shampoo-conditioner-bar",
+          thumbnail: "https://images.unsplash.com/photo-1542038335240-86aea625b913?w=800&q=85",
+          images: [{ url: "https://images.unsplash.com/photo-1542038335240-86aea625b913?w=800&q=85" }],
           weight: 85,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -584,6 +600,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
           description:
             "Organic cotton mesh bag for making homemade nut milk, juice, and straining. Fine weave catches pulp while letting liquid flow freely.",
           handle: "cotton-nut-milk-bag",
+          thumbnail: "https://images.unsplash.com/photo-1595909315417-2edd382a56dc?w=800&q=85",
+          images: [{ url: "https://images.unsplash.com/photo-1595909315417-2edd382a56dc?w=800&q=85" }],
           weight: 40,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -607,6 +625,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
           description:
             "Bamboo toothbrush, shampoo bar, safety razor, cotton rounds, and soap bar. The complete kit to make your bathroom plastic-free.",
           handle: "zero-waste-bathroom-starter-kit",
+          thumbnail: "https://images.unsplash.com/photo-1563635707334-5ce91b375ea6?w=800&q=85",
+          images: [{ url: "https://images.unsplash.com/photo-1563635707334-5ce91b375ea6?w=800&q=85" }],
           weight: 500,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -630,6 +650,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
           description:
             "Compostable bamboo dish brush with replaceable head. Sturdy natural bristles cut through grease without scratching.",
           handle: "bamboo-dish-brush",
+          thumbnail: "https://images.unsplash.com/photo-1587027768084-c3a9076c0a43?w=800&q=85",
+          images: [{ url: "https://images.unsplash.com/photo-1587027768084-c3a9076c0a43?w=800&q=85" }],
           weight: 80,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -653,6 +675,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
           description:
             "Sustainably sourced bamboo handles with charcoal-infused bristles. Compostable handle, recyclable bristles. Family 4-pack lasts a year.",
           handle: "bamboo-toothbrush-4pack",
+          thumbnail: "https://images.unsplash.com/photo-1563635707529-6d73084e17ce?w=800&q=85",
+          images: [{ url: "https://images.unsplash.com/photo-1563635707529-6d73084e17ce?w=800&q=85" }],
           weight: 60,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -682,6 +706,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
           description:
             "Plastic-free toothpaste in tablet form, fluoride-free. 60 tablets per tin. Just chew, brush, and rinse.",
           handle: "toothpaste-tablets",
+          thumbnail: "https://images.unsplash.com/photo-1633878353926-7a98d66aa6da?w=800&q=85",
+          images: [{ url: "https://images.unsplash.com/photo-1633878353926-7a98d66aa6da?w=800&q=85" }],
           weight: 50,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -711,6 +737,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
           description:
             "Biodegradable silk dental floss in a refillable glass jar. Naturally waxed with candelilla wax, mint-flavored.",
           handle: "dental-floss-glass-jar",
+          thumbnail: "https://images.unsplash.com/photo-1559818469-fdf7a1ae929c?w=800&q=85",
+          images: [{ url: "https://images.unsplash.com/photo-1559818469-fdf7a1ae929c?w=800&q=85" }],
           weight: 45,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -734,6 +762,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
           description:
             "Reusable beeswax wraps to replace plastic wrap. Made with organic cotton, beeswax, jojoba oil, and tree resin. Washable and reusable for up to a year.",
           handle: "beeswax-food-wraps-3pack",
+          thumbnail: "https://images.unsplash.com/photo-1633878353720-7a49a4a3d0ec?w=800&q=85",
+          images: [{ url: "https://images.unsplash.com/photo-1633878353720-7a49a4a3d0ec?w=800&q=85" }],
           weight: 120,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -763,6 +793,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
           description:
             "Double-walled vacuum insulated, keeps drinks cold 24hrs or hot 12hrs. Powder-coated finish, leak-proof lid. BPA-free.",
           handle: "stainless-steel-water-bottle",
+          thumbnail: "https://images.unsplash.com/photo-1649867219867-3faeab653df9?w=800&q=85",
+          images: [{ url: "https://images.unsplash.com/photo-1649867219867-3faeab653df9?w=800&q=85" }],
           weight: 340,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -817,6 +849,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
           description:
             "Pre-measured, ultra-concentrated laundry detergent sheets that dissolve completely in hot or cold water. Zero-waste packaging, no plastic jugs.",
           handle: "laundry-detergent-sheets",
+          thumbnail: "https://images.unsplash.com/photo-1626806819282-2c1dc01a5e0c?w=800&q=85",
+          images: [{ url: "https://images.unsplash.com/photo-1626806819282-2c1dc01a5e0c?w=800&q=85" }],
           weight: 150,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -846,6 +880,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
           description:
             "100% New Zealand wool dryer balls that naturally soften clothes and reduce drying time by up to 25%. Replaces single-use dryer sheets for 1,000+ loads.",
           handle: "wool-dryer-balls-6pack",
+          thumbnail: "https://images.unsplash.com/photo-1530396333989-24c5b8f805dd?w=800&q=85",
+          images: [{ url: "https://images.unsplash.com/photo-1530396333989-24c5b8f805dd?w=800&q=85" }],
           weight: 300,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -869,6 +905,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
           description:
             "Sulfate-free solid shampoo bar that lasts 60+ washes. Gentle formula with natural essential oils, plastic-free packaging.",
           handle: "shampoo-bar",
+          thumbnail: "https://images.unsplash.com/photo-1570040546652-7811017b628b?w=800&q=85",
+          images: [{ url: "https://images.unsplash.com/photo-1570040546652-7811017b628b?w=800&q=85" }],
           weight: 85,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -904,6 +942,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
           description:
             "Solid conditioner bar that deeply nourishes and detangles. Long-lasting, travel-friendly, and completely plastic-free.",
           handle: "conditioner-bar",
+          thumbnail: "https://images.unsplash.com/photo-1546552768-9e3a94b38a59?w=800&q=85",
+          images: [{ url: "https://images.unsplash.com/photo-1546552768-9e3a94b38a59?w=800&q=85" }],
           weight: 85,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -939,6 +979,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
           description:
             "Eco-friendly bamboo hair brush with natural bristles. Gentle on scalp, reduces static, and promotes healthy hair. Biodegradable handle.",
           handle: "bamboo-hair-brush",
+          thumbnail: "https://images.unsplash.com/photo-1633878351657-d5188a7ce7b1?w=800&q=85",
+          images: [{ url: "https://images.unsplash.com/photo-1633878351657-d5188a7ce7b1?w=800&q=85" }],
           weight: 120,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -962,6 +1004,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
           description:
             "Lightweight, all-natural face moisturizer in a glass jar. Made with jojoba oil, shea butter, and vitamin E. Plastic-free packaging.",
           handle: "face-moisturizer",
+          thumbnail: "https://images.unsplash.com/photo-1591134608223-67005960e763?w=800&q=85",
+          images: [{ url: "https://images.unsplash.com/photo-1591134608223-67005960e763?w=800&q=85" }],
           weight: 100,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -985,6 +1029,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
           description:
             "Washable, reusable paper towel replacements made from organic cotton and cellulose. Each sheet replaces up to 80 disposable paper towels.",
           handle: "reusable-paper-towels-12pack",
+          thumbnail: "https://images.unsplash.com/photo-1635352558665-0b01650e9b84?w=800&q=85",
+          images: [{ url: "https://images.unsplash.com/photo-1635352558665-0b01650e9b84?w=800&q=85" }],
           weight: 200,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
@@ -1008,6 +1054,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
           description:
             "Compostable Swedish dish cloth made from cotton and cellulose. Absorbs 15x its weight, replaces 17 rolls of paper towels. Machine washable.",
           handle: "swedish-dish-cloth",
+          thumbnail: "https://images.unsplash.com/photo-1550963295-019d8a8a61c5?w=800&q=85",
+          images: [{ url: "https://images.unsplash.com/photo-1550963295-019d8a8a61c5?w=800&q=85" }],
           weight: 30,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
