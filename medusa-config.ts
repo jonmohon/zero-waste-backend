@@ -135,4 +135,29 @@ module.exports = defineConfig({
       cookieSecret: process.env.COOKIE_SECRET || "supersecret",
     },
   },
+  modules: [
+    /**
+     * Override the default in-memory notification module so it routes
+     * through Resend on the `email` channel. The provider module lives
+     * in `src/modules/resend-notification` and renders branded HTML
+     * for the templates referenced by our subscribers (invite-user,
+     * customer-welcome, order-placed, password-reset).
+     */
+    {
+      resolve: "@medusajs/medusa/notification",
+      options: {
+        providers: [
+          {
+            resolve: "./src/modules/resend-notification",
+            id: "resend",
+            options: {
+              channels: ["email"],
+              api_key: process.env.RESEND_API_KEY,
+              from: process.env.RESEND_FROM,
+            },
+          },
+        ],
+      },
+    },
+  ],
 })
